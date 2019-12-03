@@ -1,0 +1,46 @@
+<html>
+<body>
+<button type="button" onclick="loadDoc()">Get Repo from Github</button>
+<h2> User Name : tokuda109</h2>
+<div id="users"></div>
+
+<script>
+
+var xhttp = new XMLHttpRequest(); // Initialize the HTTP request.
+
+// Track the state changes of the request.
+xhttp.addEventListener('load' , ()=>{
+ // readyState 4 means the request is done.
+    // status 200 is a successful return.
+    if (xhttp.readyState == 4 && xhttp.status == 200) 
+    {
+      //document.getElementById("users").innerHTML = xhttp.responseText; // 'This is the output.'
+      let repos = JSON.parse( xhttp.responseText) ;
+      if(Array.isArray( repos)  && repos.length )
+      {
+        repos.forEach(function(repo)
+                      {
+                          let node = document.createElement("div");   
+                         
+                          let textNode = document.createTextNode("Id : " + repo.id +" Name : "+ repo.name + " Project Link : " + repo.html_url);         // Create a text node
+                          node.appendChild(textNode);                              // Append the text to <p>
+                          document.getElementById("users").appendChild(node);     // Append <p> to <div> with id="users"
+                      });   
+      }
+    }
+    else
+    {
+        // An error occurred during the request.
+       console.log(xhttp.status) ;
+    }
+})
+function loadDoc() 
+{
+  xhttp.open("GET", "https://api.github.com/users/tokuda109/repos");
+  xhttp.send();
+}
+
+</script>
+
+</body>
+</html>
